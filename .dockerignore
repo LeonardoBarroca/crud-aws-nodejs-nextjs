@@ -13,3 +13,5 @@ coverage
 __tests__
 test
 .gitignore
+infra/
+.terraform/
