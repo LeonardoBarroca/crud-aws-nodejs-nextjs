@@ -145,3 +145,5 @@ terraform.tfstate.*.backup
 terraform.tfstate.backup
 .terraform.lock.hcl
 plan.out
+
+*.zip

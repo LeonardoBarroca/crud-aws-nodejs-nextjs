@@ -53,3 +53,11 @@ output "security_group_id" {
 output "cloudwatch_log_group_name" {
   value = aws_cloudwatch_log_group.log_group.name
 }
+
+output "lambda_ecs_scheduler_name" {
+  value = aws_lambda_function.ecs_scheduler.function_name
+}
+
+output "lambda_ecs_scheduler_arn" {
+  value = aws_lambda_function.ecs_scheduler.arn
+}
