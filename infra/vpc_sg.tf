@@ -88,15 +88,6 @@ resource "aws_security_group" "sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Optional: SSH access for admin (restrict CIDR in production)
-  # ingress {
-  #   description = "Allow SSH"
-  #   from_port   = 22
-  #   to_port     = 22
-  #   protocol    = "tcp"
-  #   cidr_blocks = ["YOUR_IP/32"]
-  # }
-
   egress {
     description = "Allow all outbound"
     from_port   = 0

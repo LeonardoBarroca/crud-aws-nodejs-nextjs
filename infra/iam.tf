@@ -1,4 +1,3 @@
-# execution role (pull image, logs)
 resource "aws_iam_role" "ecs_task_exec" {
   name = "ecsTaskExecutionRole-empresa"
   assume_role_policy = jsonencode({
