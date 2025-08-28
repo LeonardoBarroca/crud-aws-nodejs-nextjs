@@ -16,12 +16,12 @@ resource "aws_lambda_function" "ecs_scheduler" {
 
 resource "aws_cloudwatch_event_rule" "ecs_start_rule" {
   name                = "ecs-start-schedule"
-  schedule_expression = "cron(38 0 ? * MON-FRI *)"
+  schedule_expression = "cron(5 21 ? * MON-FRI *)"
 }
 
 resource "aws_cloudwatch_event_rule" "ecs_stop_rule" {
   name                = "ecs-stop-schedule"
-  schedule_expression = "cron(48 0 ? * MON-FRI *)"
+  schedule_expression = "cron(0 3 ? * MON-FRI *)"
 }
 
 resource "aws_cloudwatch_event_target" "ecs_start_target" {

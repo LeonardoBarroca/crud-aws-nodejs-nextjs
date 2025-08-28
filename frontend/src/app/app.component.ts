@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
-  // Ajuste a baseUrl para o endereço do seu backend
-  baseUrl = 'http://127.0.0.1:3000/api';
+  baseUrl = environment.baseUrl;
   apiPath = `${this.baseUrl}/employees`;
 
   items: any[] = [];
