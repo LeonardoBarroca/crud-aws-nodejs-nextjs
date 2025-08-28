@@ -9,8 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'frontend';
   // Ajuste a baseUrl para o endereço do seu backend
-  baseUrl = 'http://localhost:3000';
-  apiPath = `${this.baseUrl}/items`;
+  baseUrl = 'http://127.0.0.1:3000/api';
+  apiPath = `${this.baseUrl}/employees`;
 
   items: any[] = [];
   model: any = { name: '', description: '' };
