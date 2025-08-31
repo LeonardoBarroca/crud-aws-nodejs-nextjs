@@ -1,0 +1,57 @@
+name: Deploy Frontend to S3 & CloudFront
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build Angular (production)
+        working-directory: frontend
+        run: npm run build -- --configuration production
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Sync built files to S3
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: |
+          set -e
+          # find the first folder under frontend/dist (Angular output: frontend/dist/<app-name>)
+          DIST_DIR=$(ls -d frontend/dist/* 2>/dev/null | head -n 1 || true)
+          if [ -z "$DIST_DIR" ]; then
+            echo "No build output found in frontend/dist"
+            exit 1
+          fi
+          echo "Syncing $DIST_DIR to s3://$S3_BUCKET"
+          aws s3 sync "$DIST_DIR/" "s3://$S3_BUCKET/" --delete --cache-control "max-age=31536000, public"
+
+      - name: Create CloudFront invalidation (optional)
+        env:
+          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          if [ -n "$CLOUDFRONT_ID" ]; then
+            echo "Creating CloudFront invalidation for $CLOUDFRONT_ID"
+            aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_ID" --paths "/*"
+          else
+            echo "CLOUDFRONT_DISTRIBUTION_ID not set; skipping invalidation."
+          fi
