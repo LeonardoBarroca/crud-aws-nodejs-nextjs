@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChartsComponent } from './charts/charts.component';
 import { EmployeesComponent } from './employees/employees.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { EmployeesComponent } from './employees/employees.component';
     ChartsComponent
   ],
   imports: [
+    NgChartsModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

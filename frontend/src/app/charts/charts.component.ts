@@ -1,78 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { ChartData, ChartOptions, ChartType } from 'chart.js';
 
 @Component({
-  selector: 'app-charts',
+  selector: 'app-my-chart',
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.css']
 })
-export class ChartsComponent implements OnInit {
-  barChart: any;
-  lineChart: any;
+export class ChartsComponent {
+  selectedYear: string = '';
+  selectedMonth: string = '';
+  years: string[] = ['2022', '2023'];
+  months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-  constructor() {
-    Chart.register(...registerables);
+  private originalData: { [year: string]: number[] } = {
+    '2022': [65, 59, 80, 81, 56, 55, 40],
+    '2023': [75, 49, 60, 91, 66, 45, 50]
+  };
+
+  get availableMonths(): string[] {
+    return this.selectedYear ? this.months : [];
   }
 
-  ngOnInit(): void {
-    this.initializeBarChart();
-    this.initializeLineChart();
-  }
+  constructor(private http: HttpClient) { }
 
-  initializeBarChart(): void {
-    this.barChart = new Chart('barChart', {
-      type: 'bar',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  }
+  public chartType: ChartType = 'bar';
+  public chartOptions: ChartOptions = {
+    responsive: true,
+  };
+  chartData: ChartData<'bar'> = {
+    labels: this.months,
+    datasets: [
+      { data: [...this.originalData['2022'], ...this.originalData['2023']], label: 'Series A' }
+    ]
+  };
+  chartLegend = true;
 
-  initializeLineChart(): void {
-    this.lineChart = new Chart('lineChart', {
-      type: 'line',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-        datasets: [{
-          label: 'Sales',
-          data: [65, 59, 80, 81, 56, 55],
-          fill: false,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          tension: 0.1
-        }]
-      },
-      options: {
-        responsive: true
-      }
-    });
+  filterChart() {
+    if (!this.selectedYear) {
+      const allData = Object.values(this.originalData).flat();
+      this.chartData = {
+        labels: this.months.concat(this.months),
+        datasets: [
+          { data: allData, label: 'Series A' }
+        ]
+      };
+    } else if (!this.selectedMonth) {
+      this.chartData = {
+        labels: this.months,
+        datasets: [
+          { data: [...this.originalData[this.selectedYear]], label: 'Series A' }
+        ]
+      };
+    } else {
+      const idx = this.months.indexOf(this.selectedMonth);
+      this.chartData = {
+        labels: [this.selectedMonth],
+        datasets: [
+          { data: [this.originalData[this.selectedYear][idx]], label: 'Series A' }
+        ]
+      };
+    }
   }
 }
