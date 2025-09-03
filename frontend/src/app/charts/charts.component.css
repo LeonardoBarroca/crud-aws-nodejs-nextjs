@@ -7,3 +7,7 @@
 .charts-content {
   margin-top: 32px;
 }
+
+.charts-content>div {
+  margin-bottom: 32px;
+}
