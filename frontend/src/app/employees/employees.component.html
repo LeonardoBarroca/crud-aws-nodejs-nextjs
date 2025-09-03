@@ -1,0 +1,51 @@
+<div class="container">
+  <h1>Nome - Profissão</h1>
+
+  <section class="form-section">
+    <h2>{{ editing ? 'Editar item' : 'Novo item' }}</h2>
+    <form (ngSubmit)="submit()">
+      <div>
+        <label>Nome</label>
+        <input name="name" [(ngModel)]="model.name" required />
+      </div>
+      <div>
+        <label>Profissão</label>
+        <input name="role" [(ngModel)]="model.role" />
+      </div>
+      <div class="actions">
+        <button type="submit">{{ editing ? 'Atualizar' : 'Criar' }}</button>
+        <button type="button" (click)="reset()" *ngIf="editing">Cancelar</button>
+      </div>
+    </form>
+    <div class="status">
+      <span *ngIf="loading">Carregando...</span>
+      <span class="error" *ngIf="error">{{ error }}</span>
+    </div>
+  </section>
+
+  <section class="list-section">
+    <h2>Lista de itens</h2>
+    <table *ngIf="items.length > 0">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Profissão</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{ item.name }}</td>
+          <td>{{ item.role }}</td>
+          <td>
+            <button type="button" (click)="edit(item)">Editar</button>
+            <button type="button" (click)="remove(item)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="items.length === 0">
+      Nenhum item encontrado.
+    </div>
+  </section>
+</div>

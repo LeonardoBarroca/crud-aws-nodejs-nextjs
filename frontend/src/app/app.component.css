@@ -5,11 +5,42 @@
   color: #222;
 }
 
-h1 { margin-bottom: 12px; }
-form div { margin-bottom: 8px; }
-input { padding: 6px 8px; width: 100%; box-sizing: border-box; }
-.actions { margin-top: 8px; }
-button { margin-right: 8px; padding: 6px 10px; }
-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-.error { color: red; }
+h1 {
+  margin-bottom: 12px;
+}
+
+form div {
+  margin-bottom: 8px;
+}
+
+input {
+  padding: 6px 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.actions {
+  margin-top: 8px;
+}
+
+button {
+  margin-right: 8px;
+  padding: 6px 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.error {
+  color: red;
+}

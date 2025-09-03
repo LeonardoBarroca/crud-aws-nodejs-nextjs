@@ -5,10 +5,14 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ChartsComponent } from './charts/charts.component';
+import { EmployeesComponent } from './employees/employees.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    EmployeesComponent,
+    ChartsComponent
   ],
   imports: [
     BrowserModule,

@@ -17,14 +17,6 @@
     margin: 8px 0;
   }
 
-  p {
-    margin: 0;
-  }
-
-  .spacer {
-    flex: 1;
-  }
-
   .toolbar {
     position: absolute;
     top: 0;
@@ -42,6 +34,24 @@
     margin: 0 16px;
   }
 
+  .nav-links {
+    display: flex;
+    gap: 16px;
+    margin-left: 16px;
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 
   .content {
     display: flex;
@@ -52,9 +62,7 @@
     align-items: center;
   }
 
-  a,
-  a:visited,
-  a:hover {
+  a {
     color: #1976d2;
     text-decoration: none;
   }
@@ -63,97 +71,9 @@
     color: #125699;
   }
 
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 16px;
-  }
-
-  .form-section,
-  .list-section {
-    margin-top: 32px;
-  }
-
-  .form-section h2,
-  .list-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 16px;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  label {
-    font-weight: 500;
-  }
-
-  input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-
-  .actions {
-    display: flex;
-    gap: 8px;
-  }
-
-  button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    background-color: #1976d2;
-    color: white;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  button:hover {
-    background-color: #125699;
-  }
-
-  .status {
-    margin-top: 8px;
-    font-size: 0.875rem;
-  }
-
-  .error {
-    color: #f44336;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px;
-  }
-
-  th,
-  td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-  }
-
-  th {
-    background-color: #f5f5f5;
-    font-weight: 600;
-  }
-
-  tr:hover {
-    background-color: #f1f1f1;
-  }
-
   @media (max-width: 600px) {
-    .container {
+    .content {
       padding: 8px;
-    }
-
-    button {
-      width: 100%;
     }
   }
 </style>
@@ -164,60 +84,16 @@
     alt="Angular Logo"
     src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
   />
-  <span>Welcome</span>
-    <div class="spacer"></div>
+  <span>CRUD Application</span>
+  <div class="nav-links">
+    <a routerLink="/employees" routerLinkActive="active">Funcionários</a>
+    <a routerLink="/charts" routerLinkActive="active">Gráficos</a>
+  </div>
+  <div class="spacer"></div>
 </div>
 
 <div class="content" role="main">
-
-  <div class="container">
-  <h1>Nome - Profissão</h1>
-
-  <section class="form-section">
-    <h2>{{ editing ? 'Editar item' : 'Novo item' }}</h2>
-    <form (ngSubmit)="submit()">
-      <div>
-        <label>Nome</label>
-        <input name="name" [(ngModel)]="model.name" required />
-      </div>
-      <div>
-        <label>Profissão</label>
-        <input name="role" [(ngModel)]="model.role" />
-      </div>
-      <div class="actions">
-        <button type="submit">{{ editing ? 'Atualizar' : 'Criar' }}</button>
-        <button type="button" (click)="reset()" *ngIf="editing">Cancelar</button>
-      </div>
-    </form>
-    <div class="status">
-      <span *ngIf="loading">Carregando...</span>
-      <span class="error" *ngIf="error">{{ error }}</span>
-    </div>
-  </section>
-
-  <section class="list-section">
-    <h2>Lista de itens</h2>
-    <table *ngIf="items.length > 0">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Profissão</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of items">
-          <td>{{ item.name }}</td>
-          <td>{{ item.role }}</td>
-          <td>
-            <button type="button" (click)="edit(item)">Editar</button>
-            <button type="button" (click)="remove(item)">Excluir</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="items.length === 0">
-      Nenhum item encontrado.
-    </div>
-  </section>
+  <router-outlet></router-outlet>
 </div>
+
+

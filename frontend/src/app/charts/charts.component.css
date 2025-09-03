@@ -1,0 +1,9 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.charts-content {
+  margin-top: 32px;
+}
