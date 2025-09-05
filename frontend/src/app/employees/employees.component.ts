@@ -17,7 +17,7 @@ export class EmployeesComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.load();
@@ -36,14 +36,12 @@ export class EmployeesComponent implements OnInit {
   submit() {
     this.error = null;
     if (this.editing) {
-      // update
       this.http.put(`${this.apiPath}/${this.editing.id}`, this.model)
         .subscribe(
           () => { this.load(); this.reset(); },
           () => { this.error = 'Erro ao atualizar item'; }
         );
     } else {
-      // create
       this.http.post(this.apiPath, this.model)
         .subscribe(
           () => { this.load(); this.reset(); },

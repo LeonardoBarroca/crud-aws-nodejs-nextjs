@@ -18,7 +18,6 @@ export class ChartsComponent {
   };
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-  // Random data for each state
   private originalData: { [country: string]: { [state: string]: number[] } } = {
     'USA': {
       'California': [65, 59, 80, 81, 56, 55, 40],
@@ -50,7 +49,6 @@ export class ChartsComponent {
   chartData: ChartData<'bar'> = {
     labels: this.months,
     datasets: [
-      // Show all states for all countries initially
       ...Object.entries(this.originalData).flatMap(([country, states]) =>
         Object.entries(states).map(([state, data]) => ({
           data: [...data],
@@ -63,7 +61,6 @@ export class ChartsComponent {
 
   filterChart() {
     if (!this.selectedCountry) {
-      // Show all states for all countries
       this.chartData = {
         labels: this.months,
         datasets: [
@@ -76,7 +73,6 @@ export class ChartsComponent {
         ]
       };
     } else if (!this.selectedState) {
-      // Show all states for selected country
       this.chartData = {
         labels: this.months,
         datasets: [
@@ -87,7 +83,6 @@ export class ChartsComponent {
         ]
       };
     } else {
-      // Show only selected state
       const data = this.originalData[this.selectedCountry][this.selectedState];
       this.chartData = {
         labels: this.months,
