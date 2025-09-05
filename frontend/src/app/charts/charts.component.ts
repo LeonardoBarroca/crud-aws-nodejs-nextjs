@@ -8,18 +8,37 @@ import { ChartData, ChartOptions, ChartType } from 'chart.js';
   styleUrls: ['./charts.component.css']
 })
 export class ChartsComponent {
-  selectedYear: string = '';
-  selectedMonth: string = '';
-  years: string[] = ['2022', '2023'];
+  selectedCountry: string = '';
+  selectedState: string = '';
+  countries: string[] = ['USA', 'Brazil', 'India'];
+  statesByCountry: { [country: string]: string[] } = {
+    'USA': ['California', 'Texas', 'New York'],
+    'Brazil': ['São Paulo', 'Rio de Janeiro', 'Bahia'],
+    'India': ['Maharashtra', 'Karnataka', 'Tamil Nadu']
+  };
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-  private originalData: { [year: string]: number[] } = {
-    '2022': [65, 59, 80, 81, 56, 55, 40],
-    '2023': [75, 49, 60, 91, 66, 45, 50]
+  // Random data for each state
+  private originalData: { [country: string]: { [state: string]: number[] } } = {
+    'USA': {
+      'California': [65, 59, 80, 81, 56, 55, 40],
+      'Texas': [75, 49, 60, 91, 66, 45, 50],
+      'New York': [55, 69, 70, 61, 76, 35, 60]
+    },
+    'Brazil': {
+      'São Paulo': [45, 39, 60, 71, 46, 35, 30],
+      'Rio de Janeiro': [55, 59, 50, 61, 56, 25, 40],
+      'Bahia': [35, 49, 40, 51, 36, 15, 20]
+    },
+    'India': {
+      'Maharashtra': [85, 79, 90, 81, 86, 75, 70],
+      'Karnataka': [65, 59, 80, 71, 66, 55, 60],
+      'Tamil Nadu': [75, 69, 60, 91, 76, 65, 50]
+    }
   };
 
-  get availableMonths(): string[] {
-    return this.selectedYear ? this.months : [];
+  get availableStates(): string[] {
+    return this.selectedCountry ? this.statesByCountry[this.selectedCountry] : [];
   }
 
   constructor(private http: HttpClient) { }
@@ -31,33 +50,49 @@ export class ChartsComponent {
   chartData: ChartData<'bar'> = {
     labels: this.months,
     datasets: [
-      { data: [...this.originalData['2022'], ...this.originalData['2023']], label: 'Series A' }
+      // Show all states for all countries initially
+      ...Object.entries(this.originalData).flatMap(([country, states]) =>
+        Object.entries(states).map(([state, data]) => ({
+          data: [...data],
+          label: `${state} (${country})`
+        }))
+      )
     ]
   };
   chartLegend = true;
 
   filterChart() {
-    if (!this.selectedYear) {
-      const allData = Object.values(this.originalData).flat();
-      this.chartData = {
-        labels: this.months.concat(this.months),
-        datasets: [
-          { data: allData, label: 'Series A' }
-        ]
-      };
-    } else if (!this.selectedMonth) {
+    if (!this.selectedCountry) {
+      // Show all states for all countries
       this.chartData = {
         labels: this.months,
         datasets: [
-          { data: [...this.originalData[this.selectedYear]], label: 'Series A' }
+          ...Object.entries(this.originalData).flatMap(([country, states]) =>
+            Object.entries(states).map(([state, data]) => ({
+              data: [...data],
+              label: `${state} (${country})`
+            }))
+          )
+        ]
+      };
+    } else if (!this.selectedState) {
+      // Show all states for selected country
+      this.chartData = {
+        labels: this.months,
+        datasets: [
+          ...Object.entries(this.originalData[this.selectedCountry]).map(([state, data]) => ({
+            data: [...data],
+            label: state
+          }))
         ]
       };
     } else {
-      const idx = this.months.indexOf(this.selectedMonth);
+      // Show only selected state
+      const data = this.originalData[this.selectedCountry][this.selectedState];
       this.chartData = {
-        labels: [this.selectedMonth],
+        labels: this.months,
         datasets: [
-          { data: [this.originalData[this.selectedYear][idx]], label: 'Series A' }
+          { data: [...data], label: this.selectedState }
         ]
       };
     }
