@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-my-chart',
@@ -92,4 +93,14 @@ export class ChartsComponent {
       };
     }
   }
+
+  async getJsonFile() {
+    try {
+      const response = await lastValueFrom(this.http.get('/assets/data/synthetic_data_large.json'));
+      console.log('Arquivo JSON buscado com sucesso:', response);
+    } catch (error) {
+      console.log('Erro ao buscar arquivo JSON:', error);
+    }
+  }
 }
+

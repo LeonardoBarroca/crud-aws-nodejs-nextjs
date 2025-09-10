@@ -1,6 +1,7 @@
 import cors from "@fastify/cors";
 import Fastify from "fastify";
 import routes from "./routes/index.js";
+import staticRoutes from "./routes/static.routes.js";
 
 export function buildApp() {
   const app = Fastify({
@@ -14,6 +15,7 @@ export function buildApp() {
   });
 
   app.register(routes, { prefix: "/api" });
+  app.register(staticRoutes, { prefix: "/api" });
 
   app.get("/", async () => ({ ok: true }));
 
